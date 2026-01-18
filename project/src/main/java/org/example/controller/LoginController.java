@@ -6,10 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.model.User;
 import org.example.service.AuthService;
@@ -21,6 +18,7 @@ public class LoginController {
     @FXML
     private PasswordField password;
     @FXML private Button LoginClick;
+    @FXML private Hyperlink Dangkingay;
     @FXML
     public void LoginClick(ActionEvent event){
         String user = username.getText();
@@ -34,7 +32,7 @@ public class LoginController {
            if(users.getRole().equals("ADMIN")){
                 switchScene(event,"/view/Admin/Admindashboard.fxml");
             }else{
-                switchScene(event,"/view/User/Userdashboard.fxml");
+                switchScene(event,"/view/User/adressUser.fxml");
            }
         }else{
             showAlert(Alert.AlertType.ERROR,"loi","sai tai khoan hoac mat khau");
@@ -51,6 +49,19 @@ public class LoginController {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR,"loi","Không tìm thấy file giao diện: " + fxmlPath);
         }
+    }
+    @FXML
+    private void Dangkingay(ActionEvent event){
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/regsister.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);

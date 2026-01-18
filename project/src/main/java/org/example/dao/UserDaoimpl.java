@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.constant.AuthResult;
 import org.example.model.User;
 
 import java.sql.Connection;
@@ -20,5 +21,25 @@ public class UserDaoimpl implements UserDao{
             e.printStackTrace();
         }
         return null;
+    }
+    @Override
+    public AuthResult insertUser(String username, String password){
+        try (Connection conn = DBConnection.getConnection()){
+            PreparedStatement ps = conn.prepareStatement("select * from users where username = ?");
+            ps.setString(1,username);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {return AuthResult.USERNAME_EXISTS;}
+            else{
+                PreparedStatement insert = conn.prepareStatement("insert into users(username,password,role) values (?,?,?)");
+                insert.setString(1,username);
+                insert.setString(2,password);
+                insert.setString(3,"USER");
+                insert.executeUpdate();
+                return AuthResult.SUCCESS;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return AuthResult.ERROR;
     }
 }

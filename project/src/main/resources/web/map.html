@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map - JavaFX</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100vw; }
+        #status {
+            position: absolute; top: 10px; left: 50px; z-index: 1000;
+            background: white; padding: 5px 10px; border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3); font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id="status">Đang chờ vị trí từ Java...</div>
+<div id="map"></div>
+
+<script>
+    // 1. Khởi tạo bản đồ mặc định tại Việt Nam
+    var map = L.map('map').setView([14.0583, 108.2772], 5);
+
+    // 2. Thêm lớp bản đồ từ OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var marker;
+
+    // 3. Hàm này sẽ được Java gọi để truyền tọa độ vào
+    function updateMap(lat, lng) {
+        document.getElementById("status").innerText = "Vị trí: " + lat.toFixed(4) + ", " + lng.toFixed(4);
+        var newPos = [lat, lng];
+        // Di chuyển camera đến vị trí mới
+        map.setView(newPos, 15);
+
+        // Thêm hoặc di chuyển Marker
+        if (marker) {
+            marker.setLatLng(newPos);
+        } else {
+            marker = L.marker(newPos).addTo(map);
+        }
+        marker.bindPopup("Bạn đang ở đây!").openPopup();
+    }
+</script>
+</body>
+</html>

@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.controller.GPSController;
+import org.example.utils.DBinit;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -14,6 +16,7 @@ public class Main extends Application {
         s.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/logindashboard.fxml"))));
         s.setTitle("Hệ thống đặt xe");
         s.show();
+        System.out.println("connect");
     }
     public static void main(String[] args) {
         launch();

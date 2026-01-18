@@ -1,23 +1,23 @@
 package org.example.model;
 
 public class ParkingLot {
-    private int parkinglot_id;
+    private int id;
     private String name;
     private String address;
     private int totalSlots;
-    public ParkingLot(int parkinglot_id, String name, String address, int totalSlots) {
-        this.parkinglot_id = parkinglot_id;
+    private boolean active;
+    public ParkingLot(int id, String name, String address, int totalSlots, boolean active) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.totalSlots = totalSlots;
+        this.active = active;
     }
-
-    public int getParkinglot_id() {
-        return parkinglot_id;
+    public int getId() {
+        return id;
     }
-
-    public void setParkinglot_id(int parkinglot_id) {
-        this.parkinglot_id = parkinglot_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,5 +42,13 @@ public class ParkingLot {
 
     public void setTotalSlots(int totalSlots) {
         this.totalSlots = totalSlots;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

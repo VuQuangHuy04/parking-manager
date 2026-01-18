@@ -2,17 +2,17 @@ package org.example.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String url = "jdbc:mysql://localhost:3306/parking";
-    private static final String user = "root";
-    private static final String password = "123456";
-     public static Connection getConnection(){
-         try{
-             return DriverManager.getConnection(url,user,password);
-         }catch (Exception e){
-             e.printStackTrace();
-             return null;
-         }
-     }
+    private static final String url = "jdbc:sqlite:parking.db";
+    public static Connection getConnection() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            return DriverManager.getConnection(url);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

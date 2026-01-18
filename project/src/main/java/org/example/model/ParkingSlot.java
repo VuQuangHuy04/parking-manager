@@ -3,29 +3,40 @@ package org.example.model;
 import org.example.constant.VehicleType;
 
 public class ParkingSlot {
-    private String Slotid;
-    private VehicleType type;
+    private int id;
+    private int parkinglot_id;
+    private String slotCode;
     private boolean available;
-    public ParkingSlot(String slotid, VehicleType type, boolean available) {
-        this.Slotid = slotid;
-        this.type = type;
+
+    public ParkingSlot(int id, int parkinglot_id, String slotCode, boolean available) {
+        this.id = id;
+        this.parkinglot_id = parkinglot_id;
+        this.slotCode = slotCode;
         this.available = available;
     }
 
-    public String getSlotid() {
-        return Slotid;
+    public int getId() {
+        return id;
     }
 
-    public void setSlotid(String slotid) {
-        Slotid = slotid;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public VehicleType getType() {
-        return type;
+    public int getParkinglot_id() {
+        return parkinglot_id;
     }
 
-    public void setType(VehicleType type) {
-        this.type = type;
+    public void setParkinglot_id(int parkinglot_id) {
+        this.parkinglot_id = parkinglot_id;
+    }
+
+    public String getSlotCode() {
+        return slotCode;
+    }
+
+    public void setSlotCode(String slotCode) {
+        this.slotCode = slotCode;
     }
 
     public boolean isAvailable() {
