@@ -10,7 +10,8 @@ CREATE TABLE parking_lots (
                               id INTEGER PRIMARY KEY AUTOINCREMENT,
                               name TEXT,
                               address TEXT,
-                              total_slots INTEGER
+                              total_slots INTEGER,
+                              active BOOLEAN
 
 );
 

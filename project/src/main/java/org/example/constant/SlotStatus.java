@@ -1,7 +1,7 @@
 package org.example.constant;
 
 public enum SlotStatus
-{ AVAILABLE,
+{   AVAILABLE,
     BOOKED,
     OCCUPIED
 }
