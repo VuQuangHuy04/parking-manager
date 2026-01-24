@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.model.User;
 import org.example.service.AuthService;
+import org.example.session.UserSession;
 
 public class LoginController {
     private AuthService authService = new AuthService();
@@ -28,6 +29,7 @@ public class LoginController {
             return;
         }
         User users = authService.login(user,pass);
+        UserSession.setUser(users); // set usersession de su dung
         if(users!= null){
            if(users.getRole().equals("ADMIN")){
                 switchScene(event,"/view/Admin/Admindashboard.fxml");

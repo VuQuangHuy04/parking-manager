@@ -7,7 +7,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 public class osmAPI {
-    public static void getCoordinateFromAddress(String address) {
+    public static Double[] getCoordinateFromAddress(String address) {
         try {
             String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
             String urlString = "https://nominatim.openstreetmap.org/search?q="
@@ -25,17 +25,19 @@ public class osmAPI {
             in.close();
             String jsonResponse = response.toString();
             if (!jsonResponse.equals("[]")) {
-                String lat = jsonResponse.split("\"lat\":\"")[1].split("\"")[0];
-                String lon = jsonResponse.split("\"lon\":\"")[1].split("\"")[0];
+                Double lat = Double.parseDouble(jsonResponse.split("\"lat\":\"")[1].split("\"")[0]);
+                Double lon = Double.parseDouble(jsonResponse.split("\"lon\":\"")[1].split("\"")[0]);
                 String displayName = jsonResponse.split("\"display_name\":\"")[1].split("\"")[0];
                 System.out.println("Địa chỉ đầy đủ: " + displayName);
-                System.out.println("Vĩ độ (Lat): " + lat);
-                System.out.println("Kinh độ (Lon): " + lon);
+                return new Double[]{lat , lon};
             } else {
-                System.out.println("Không tìm thấy địa chỉ này trên OpenStreetMap.");
+                System.out.println("Không tìm thấy địa chỉ này");
+                return null;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

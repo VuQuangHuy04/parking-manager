@@ -3,7 +3,9 @@ CREATE TABLE users (
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                        username TEXT UNIQUE,
                        password TEXT,
-                       role TEXT
+                       role TEXT,
+                       latitude DOUBLE,
+                       longitude DOUBLE
 );
 -- Tạo bảng Parking Lots
 CREATE TABLE parking_lots (
@@ -11,7 +13,9 @@ CREATE TABLE parking_lots (
                               name TEXT,
                               address TEXT,
                               total_slots INTEGER,
-                              active BOOLEAN
+                              active BOOLEAN,
+                              latitude DOUBLE,
+                              longitude DOUBLE
 
 );
 
@@ -40,9 +44,8 @@ INSERT INTO users (username, password, role) VALUES
                                                  ('user', '123', 'USER');
 
 INSERT INTO parking_lots (name, address, total_slots) VALUES
-    ('Bãi xe Trung Tâm', '123 Lê Lợi', 10);
-
-INSERT INTO parking_slots (slot_id, lot_id, vehicle_type) VALUES
-                                                              ('A1', 1, 'CAR'),
-                                                              ('A2', 1, 'CAR'),
-                                                              ('B1', 1, 'BIKE');
+    ('Bãi xe Lê Lợi', '123 Lê Lợi, hà nội', 10);
+INSERT INTO parking_lots (name, address, total_slots) VALUES
+    ('Bãi xe Giải Phóng', '55 Giải Phóng, hà nội', 10);
+INSERT INTO parking_lots (name, address, total_slots) VALUES
+    ('Bãi xe Nguyễn Trãi', '123 Nguyễn Trãi, hà nội', 10);

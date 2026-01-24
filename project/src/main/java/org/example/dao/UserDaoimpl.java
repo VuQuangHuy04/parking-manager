@@ -42,4 +42,17 @@ public class UserDaoimpl implements UserDao{
         }
         return AuthResult.ERROR;
     }
+    @Override
+    public void updateLatandLon(int id, double lat, double lon){
+        String sql = "UPDATE users SET lat = ?, lon = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+                  PreparedStatement ps = conn.prepareStatement(sql)) {
+                 ps.setDouble(1, lat);
+                 ps.setDouble(2, lon);
+                 ps.setInt(3, id);
+                 ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

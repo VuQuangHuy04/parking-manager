@@ -8,4 +8,5 @@ import netscape.javascript.JSObject;
 
 public class UserController {
 
+
 }
