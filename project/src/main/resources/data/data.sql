@@ -44,5 +44,14 @@ INSERT INTO parking_lots (name, address, total_slots) VALUES
 
 INSERT INTO parking_slots (slot_id, lot_id, vehicle_type) VALUES
                                                               ('A1', 1, 'CAR'),
-                                                              ('A2', 1, 'CAR'),
-                                                              ('B1', 1, 'BIKE');
+                                                              ('A2', 2, 'CAR'),
+                                                              ('A3', 3, 'CAR'),
+                                                              ('A4', 4, 'CAR'),
+                                                              ('A5', 5, 'CAR'),
+                                                              ('B1', 6, 'MOTOBIKE'),
+                                                              ('B2', 7, 'MOTOBIKE'),
+                                                              ('B3', 8, 'MOTOBIKE'),
+                                                              ('B4', 9, 'MOTOBIKE'),
+                                                              ('B5', 10, 'MOTOBIKE'),
+
+

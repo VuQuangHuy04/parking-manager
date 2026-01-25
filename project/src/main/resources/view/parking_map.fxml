@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.ParkingMapController"
+            prefHeight="600" prefWidth="800">
+
+    <children>
+        <Text layoutX="300" layoutY="30" text="Sơ đồ Bãi đỗ xe Trung Tâm" strokeType="OUTSIDE" strokeWidth="0.0">
+            <font>
+                <Font size="24"/>
+            </font>
+        </Text>
+
+        <GridPane fx:id="gridPane" layoutX="50" layoutY="60"/>
+    </children>
+</AnchorPane>

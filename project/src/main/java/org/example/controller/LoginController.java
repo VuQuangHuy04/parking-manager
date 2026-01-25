@@ -29,11 +29,18 @@ public class LoginController {
         }
         User users = authService.login(user,pass);
         if(users!= null){
-           if(users.getRole().equals("ADMIN")){
+//           if(users.getRole().equals("ADMIN")){
+//                switchScene(event,"/view/Admin/Admindashboard.fxml");
+//            }else{
+//                switchScene(event,"/view/User/adressUser.fxml");
+//           }
+            if(users.getRole().equals("ADMIN")){
                 switchScene(event,"/view/Admin/Admindashboard.fxml");
             }else{
-                switchScene(event,"/view/User/adressUser.fxml");
-           }
+                // Mở trực tiếp bãi xe Trung Tâm sau khi user đăng nhập
+                switchScene(event,"/view/ParkingMap.fxml");
+            }
+
         }else{
             showAlert(Alert.AlertType.ERROR,"loi","sai tai khoan hoac mat khau");
         }
