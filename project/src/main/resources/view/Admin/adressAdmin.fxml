@@ -10,22 +10,17 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.AdressController">
    <children>
-      <Text layoutX="150.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User finding parking">
-         <font>
-            <Font size="35.0" />
-         </font>
-      </Text>
       <TextField fx:id="adresstxt" layoutX="163.0" layoutY="137.0" prefHeight="33.0" prefWidth="275.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <Text layoutX="182.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập vị trí hiện tại của bạn">
+      <Text layoutX="216.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập tên bãi xe" wrappingWidth="139.619140625">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="464.0" layoutY="134.0" mnemonicParsing="false" onAction="#Submit" prefHeight="27.0" prefWidth="144.0" text="Xác nhận">
+      <Button layoutX="464.0" layoutY="134.0" mnemonicParsing="false" onAction="#Submit" prefHeight="38.0" prefWidth="144.0" text="Xác nhận">
          <font>
             <Font size="21.0" />
          </font>

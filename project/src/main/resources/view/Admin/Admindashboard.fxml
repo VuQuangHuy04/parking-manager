@@ -6,24 +6,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="291.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.UserController">
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding:10; -fx-background-color:#2c3e50;">
-            <Label style="-fx-text-fill:white; -fx-font-size:18;" text="HỆ THỐNG BÃI GIỮ XE" />
-            <Region HBox.hgrow="ALWAYS" />
+            <Label prefHeight="27.0" prefWidth="334.0" style="-fx-text-fill:white; -fx-font-size:18;" text="HỆ THỐNG BÃI GIỮ XE THÔNG MINH" />
             <Label fx:id="usernameLabel" style="-fx-text-fill:white;" />
             <Button onAction="#handleLogout" text="Đăng xuất" />
         </HBox>
     </top>
     <left>
         <VBox prefHeight="209.0" prefWidth="212.0" spacing="10" style="-fx-padding:15; -fx-background-color:#ecf0f1;">
-            <Button onAction="#openParkingLots" prefWidth="180" text="🅿 Chọn bãi xe" />
-            <Button onAction="#openHistory" prefWidth="180" text="📜 Lịch sử gửi xe" />
-             <Button onAction="#openInfomation" prefHeight="25.0" prefWidth="182.0" text="📜 Thông tin account" />
+            <Button onAction="#openParkingLots" prefWidth="180" text="🅿 Quản lý bãi xe" />
+            <Button onAction="#openHistory" prefWidth="180" text="📜 Theo dõi doanh thu" />
+             <Button onAction="#openInfomation" prefHeight="25.0" prefWidth="182.0" text="📜 Lịch sử booking" />
         </VBox>
     </left>
     <center>
@@ -36,5 +34,4 @@
             </AnchorPane>
          </children></StackPane>
     </center>
-
 </BorderPane>

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IParkingDao {
-    public List<String> getAddressList();
-    public boolean UpdateLatandLon(String address);
-    public List<ParkingLotDTO> GetParkingDTO();
+    public List<ParkingLotDTO> getParkingWithoutCoordinate();
+    public void updateLatLonById(int id, double lat, double lon);
+    public List<ParkingLotDTO> getAllParkingDTO();
 }

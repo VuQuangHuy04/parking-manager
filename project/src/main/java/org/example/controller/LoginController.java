@@ -32,9 +32,9 @@ public class LoginController {
         UserSession.setUser(users); // set usersession de su dung
         if(users!= null){
            if(users.getRole().equals("ADMIN")){
-                switchScene(event,"/view/Admin/Admindashboard.fxml");
+                switchScene(event,"/view/User/Userdashboard.fxml");
             }else{
-                switchScene(event,"/view/User/adressUser.fxml");
+                switchScene(event,"/view/User/Userdashboard.fxml");
            }
         }else{
             showAlert(Alert.AlertType.ERROR,"loi","sai tai khoan hoac mat khau");

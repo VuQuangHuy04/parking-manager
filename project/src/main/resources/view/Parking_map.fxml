@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="10" style="-fx-padding: 15; -fx-background-color: #f4f4f4;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.controller.ParkingMapController">
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label fx:id="lotNameLabel" text="Tên bãi xe">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <HBox fx:id="adminToolBar" spacing="10" visible="false" managed="${adminToolBar.visible}">
+            <Button onAction="#onAddNewSlot" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="+ Thêm ô đỗ" />
+            <Button onAction="#onSaveLayout" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand;" text="Lưu sơ đồ" />
+            <Label text="(Admin: Kéo chuột để di chuyển)" style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;" />
+        </HBox>
+    </HBox>
+
+    <HBox spacing="15" style="-fx-padding: 0 0 5 0;">
+        <HBox spacing="5" alignment="CENTER">
+            <Pane prefWidth="12" prefHeight="12" style="-fx-background-color: #2ecc71; -fx-background-radius: 2;"/>
+            <Label text="Còn trống" style="-fx-font-size: 12px;"/>
+        </HBox>
+        <HBox spacing="5" alignment="CENTER">
+            <Pane prefWidth="12" prefHeight="12" style="-fx-background-color: #e74c3c; -fx-background-radius: 2;"/>
+            <Label text="Đã đặt" style="-fx-font-size: 12px;"/>
+        </HBox>
+    </HBox>
+    <Separator />
+
+    <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <content>
+            <Pane fx:id="mapPane" prefHeight="1500.0" prefWidth="1500.0" style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 0.5;">
+            </Pane>
+        </content>
+    </ScrollPane>
+
+</VBox>

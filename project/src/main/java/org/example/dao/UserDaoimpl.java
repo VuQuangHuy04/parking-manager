@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.example.session.UserSession;
 import org.example.utils.DBConnection;
 public class UserDaoimpl implements UserDao{
     @Override
@@ -43,16 +44,20 @@ public class UserDaoimpl implements UserDao{
         return AuthResult.ERROR;
     }
     @Override
-    public void updateLatandLon(int id, double lat, double lon){
-        String sql = "UPDATE users SET lat = ?, lon = ? WHERE id = ?";
+    public boolean updateUserLocation(int userId, double lat, double lon) {
+        String sql = "UPDATE users SET latitude=?, longitude=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
-                  PreparedStatement ps = conn.prepareStatement(sql)) {
-                 ps.setDouble(1, lat);
-                 ps.setDouble(2, lon);
-                 ps.setInt(3, id);
-                 ps.executeUpdate();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDouble(1, lat);
+            ps.setDouble(2, lon);
+            ps.setInt(3, userId);
+
+            return ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

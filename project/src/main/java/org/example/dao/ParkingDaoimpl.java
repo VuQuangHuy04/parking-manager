@@ -11,15 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 public class ParkingDaoimpl implements IParkingDao{
     @Override
-    public List<String> getAddressList() {
-        List<String> list = new ArrayList<>();
-        String sql = "SELECT address FROM parking_lots";
+    public List<ParkingLotDTO> getParkingWithoutCoordinate() {
+        List<ParkingLotDTO> list = new ArrayList<>();
+        String sql = """
+        SELECT id, name, address 
+        FROM parking_lots
+        WHERE latitude IS NULL OR longitude IS NULL
+    """;
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) { // Thực thi truy vấn
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                String addr = rs.getString("address");
-                list.add(addr);
+                list.add(new ParkingLotDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        0, 0
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,47 +37,45 @@ public class ParkingDaoimpl implements IParkingDao{
         return list;
     }
      @Override
-     public boolean UpdateLatandLon(String address) {
-        Double[] coordinate = osmAPI.getCoordinateFromAddress(address);
-        if (coordinate == null) {
-            System.out.println("Không lấy được tọa độ");
-            return false;
-        }
-        double lat = coordinate[0];
-        double lon = coordinate[1];
-        String sql = """
-            INSERT INTO parking_lots( latitude, longitude) 
-            VALUES (?, ?) where Address = ?
-        """;
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, lat);
-            ps.setDouble(2, lon);
-            ps.setString(3, address);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+     public void updateLatLonById(int id, double lat, double lon) {
+         String sql = "UPDATE parking_lots SET latitude=?, longitude=? WHERE id=?";
+
+         try (Connection conn = DBConnection.getConnection();
+              PreparedStatement ps = conn.prepareStatement(sql)) {
+
+             ps.setDouble(1, lat);
+             ps.setDouble(2, lon);
+             ps.setInt(3, id);
+             ps.executeUpdate();
+
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
+
+
     @Override
-    public List<ParkingLotDTO> GetParkingDTO(){
+    public List<ParkingLotDTO> getAllParkingDTO() {
         List<ParkingLotDTO> list = new ArrayList<>();
-        String sql = "SELECT id, address, latitude, longitude FROM parking_lots";
+        String sql = "SELECT id, name, address, latitude, longitude FROM parking_lots";
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String address = rs.getString("address");
-                double lat = rs.getDouble("latitude");
-                double lon = rs.getDouble("longitude");
-                ParkingLotDTO dto = new ParkingLotDTO(id, address, lat, lon);
-                list.add(dto);
+                list.add(new ParkingLotDTO(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getDouble("latitude"),
+                        rs.getDouble("longitude")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
+
     }
