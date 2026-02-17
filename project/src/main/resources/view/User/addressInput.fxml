@@ -1,0 +1,9 @@
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.AdressController">
+    <Label text="BẠN MUỐN GỬI XE Ở ĐÂU?" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <TextField fx:id="adresstxt" promptText="Nhập địa chỉ hiện tại..." prefWidth="300" />
+    <Button text="Tìm bãi xe gần nhất" onAction="#handleSearchAddress" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" />
+</VBox>

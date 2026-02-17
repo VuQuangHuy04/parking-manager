@@ -98,7 +98,6 @@ public class ParkingMapController {
         dialog.getDialogPane().setContent(container);
         dialog.showAndWait();
     }
-
     private void startCountdown(LocalDateTime endTime, Label label,ParkingSlot slot, Button btn) {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             java.time.Duration diff = java.time.Duration.between(LocalDateTime.now(), endTime);
@@ -137,7 +136,6 @@ public class ParkingMapController {
             btn.setLayoutX(e.getSceneX() - mapPane.getLayoutX() - (btn.getWidth() / 2));
             btn.setLayoutY(e.getSceneY() - mapPane.getLayoutY() - (btn.getHeight() / 2));
         });
-
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Xóa ô này");
         deleteItem.setOnAction(e -> {
@@ -175,13 +173,9 @@ public class ParkingMapController {
         alert.showAndWait();
     }
     public void startAutoUpdate(boolean isAdmin) {
-        // Tạo một chu kỳ lặp lại sau mỗi 30 giây
         Timeline autoUpdate = new Timeline(new KeyFrame(Duration.seconds(30), event -> {
-            // 1. Gọi Service để quét các booking hết hạn và cập nhật DB
             parkingService.getSlotsWithLiveStatus();
             loadDataAndRender(isAdmin);
-
-            System.out.println("Hệ thống đã tự động cập nhật trạng thái ô đỗ lúc: " + LocalDateTime.now());
         }));
         autoUpdate.setCycleCount(Animation.INDEFINITE); // Chạy vô hạn cho đến khi đóng App
         autoUpdate.play(); // Bắt đầu chạy

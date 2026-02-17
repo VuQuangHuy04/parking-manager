@@ -11,11 +11,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class ParkingService {
     private ParkingDaoimpl dao = new ParkingDaoimpl();
     private SlotDaoimpl slotDaoimpl = new SlotDaoimpl();
-    private SlotDaoimpl slotDAO = new SlotDaoimpl();
     private BookingDaoimpl bookingDAO = new BookingDaoimpl();
     public List<ParkingLotDTO> getParkingDTO() {
         List<ParkingLotDTO> needUpdate = dao.getParkingWithoutCoordinate();
@@ -44,11 +42,7 @@ public class ParkingService {
         list.sort((a, b) -> Double.compare(a.getDistance(), b.getDistance()));
         return list;
     }
-
     // --- QUẢN LÝ Ô ĐỖ (SLOTS) ---
-    public List<ParkingSlot> getSlotsByLotId(int lotId) {
-        return slotDaoimpl.getSlotsByLotId(lotId);
-    }
     public List<ParkingSlot> getSlotsWithLiveStatus() {
         bookingDAO.clearExpiredBookings();
         return slotDaoimpl.getAllSlots();
@@ -56,32 +50,22 @@ public class ParkingService {
     public boolean insertSlot(ParkingSlot slot) {
         return slotDaoimpl.insertSlot(slot);
     }
-
     public boolean deleteSlot(int slotId) {
         return slotDaoimpl.deleteSlot(slotId);
-    }
-    // user
-    public void updateSlotPosition(int lotId, String code, double x, double y) {
-        slotDaoimpl.updateSlotPosition(lotId, code, x, y);
     }
     // Dành cho User: Lấy map và tự động cập nhật trạng thái trống/đầy theo thời gian thực
     public List<ParkingSlot> getSlotsWithLiveStatus(int lotId) {
         bookingDAO.clearExpiredBookings(); // Quét dọn DB trước khi trả dữ liệu về UI
-        return slotDAO.getSlotsByLotId(lotId);
+        return slotDaoimpl.getSlotsByLotId(lotId);
     }
-
     public boolean bookSlot(int slotId, int userId, int hours) {
         LocalDateTime endTime = LocalDateTime.now().plusHours(hours);
         return bookingDAO.createBooking(slotId, userId, endTime);
     }
-
     public LocalDateTime getBookingEndTime(int slotId) {
         return bookingDAO.getActiveBookingEndTime(slotId);
     }
-
-    // Các hàm Admin giữ nguyên (DAO slotDAO xử lý)
     public void updateSlotPositionp(int lotId, String code, double x, double y) {
-        slotDAO.updateSlotPosition(lotId, code, x, y);
+        slotDaoimpl.updateSlotPosition(lotId, code, x, y);
     }
-    // ... insertSlot, deleteSlot ...
 }

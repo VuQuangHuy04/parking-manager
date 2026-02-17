@@ -103,12 +103,4 @@ public class SlotDaoimpl implements ISlotDao{
             ps.executeUpdate();
         }
     }
-    public void setEmpty(int slotId) throws SQLException {
-        String sql = "UPDATE parking_slots SET status='EMPTY', user_id=NULL WHERE id=?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, slotId);
-            ps.executeUpdate();
-        }
-    }
 }
