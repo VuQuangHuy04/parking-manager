@@ -1,5 +1,4 @@
 package org.example.service;
-
 import org.example.constant.AuthResult;
 import org.example.dao.UserDaoimpl;
 import org.example.model.User;

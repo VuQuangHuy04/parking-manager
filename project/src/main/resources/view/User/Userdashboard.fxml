@@ -28,7 +28,7 @@
                 <Label style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;" text="MENU QUẢN TRỊ" />
                 <Button onAction="#openAdminControl" prefWidth="180" text="🛠 Quản lý bãi xe" />
                 <Button onAction="#openUserManagement" prefWidth="180" text="👥 Quản lý người dùng" />
-                <Button onAction="#openSystemReport" prefWidth="180" text="📊 Báo cáo hệ thống" />
+                <Button onAction="#openHistoryManage" prefWidth="180" text="📊 Báo cáo hệ thống" />
             </VBox>
 
         </VBox>

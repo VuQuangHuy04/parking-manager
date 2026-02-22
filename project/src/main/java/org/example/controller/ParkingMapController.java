@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.example.model.ParkingSlot;
+import org.example.service.BookingService;
 import org.example.service.ParkingService;
 import org.example.session.UserSession;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class ParkingMapController {
     private String parkingLotName;
     private int currentLotId;
     private List<ParkingSlot> slots = new ArrayList<>();
+    BookingService bookingService = new BookingService();
     private ParkingService parkingService = new ParkingService();
     public void setParkingLotData(String lotName, int id) {
         this.parkingLotName = lotName;
@@ -35,7 +37,7 @@ public class ParkingMapController {
         startAutoUpdate(isAdmin);
     }
     private void loadDataAndRender(boolean isAdmin) {
-        this.slots = parkingService.getSlotsWithLiveStatus(currentLotId);
+        this.slots = parkingService.getSlots(currentLotId);
         mapPane.getChildren().clear();
         for (ParkingSlot slot : slots) {
             createSlotButton(slot, isAdmin);
@@ -58,70 +60,153 @@ public class ParkingMapController {
     private void showSlotInfoCard(ParkingSlot slot, Button btn) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Thông tin ô " + slot.getSlotCode());
+
         VBox container = new VBox(10);
         container.setPadding(new Insets(20));
 
+        // ================= EMPTY SLOT =================
         if (slot.getStatus().equals("EMPTY")) {
-            // CHẾ ĐỘ ĐẶT CHỖ
-            TextField hoursField = new TextField();
-            hoursField.setPromptText("Nhập số giờ...");
-            container.getChildren().addAll(new Label("Mã: " + slot.getSlotCode()), new Label("Trạng thái: Trống"), hoursField);
+
+            // Spinner giờ
+            Spinner<Integer> hourSpinner = new Spinner<>(0, 23, 0);
+            hourSpinner.setEditable(true);
+
+            // Spinner phút
+            Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, 30);
+            minuteSpinner.setEditable(true);
+
+            HBox timeBox = new HBox(10,
+                    new Label("Giờ:"), hourSpinner,
+                    new Label("Phút:"), minuteSpinner
+            );
+
+            ComboBox<String> paymentBox = new ComboBox<>();
+            paymentBox.getItems().addAll("MOMO", "VNPAY", "CASH");
+            paymentBox.setPromptText("Chọn phương thức thanh toán");
+
+            container.getChildren().addAll(
+                    new Label("Mã: " + slot.getSlotCode()),
+                    new Label("Giá: 5000 / giờ"),
+                    timeBox,
+                    paymentBox
+            );
+
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
             dialog.setResultConverter(bt -> {
                 if (bt == ButtonType.OK) {
                     try {
-                        int hours = Integer.parseInt(hoursField.getText());
-                        if (parkingService.bookSlot(slot.getId(), UserSession.getUserId(), hours)) {
-                            slot.setStatus("OCCUPIED");
-                            updateButtonStyle(btn, slot);
+                        int hours = hourSpinner.getValue();
+                        int minutes = minuteSpinner.getValue();
+                        int totalMinutes = hours * 60 + minutes;
+
+                        if (totalMinutes <= 0) {
+                            showAlert(Alert.AlertType.ERROR, "Lỗi", "Thời gian phải lớn hơn 0");
+                            return null;
                         }
-                    } catch (Exception e) { showAlert(Alert.AlertType.ERROR, "Lỗi", "Số giờ không hợp lệ"); }
+
+                        String method = paymentBox.getValue();
+                        if (method == null) {
+                            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn phương thức thanh toán");
+                            return null;
+                        }
+
+                        // Tính tiền theo phút
+                        double totalPrice = parkingService.calculatePrice(totalMinutes);
+
+                        Alert paymentAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                        paymentAlert.setTitle("Xác nhận thanh toán");
+                        paymentAlert.setHeaderText("Thông tin thanh toán");
+                        paymentAlert.setContentText(
+                                "Thời gian: " + hours + " giờ " + minutes + " phút" +
+                                        "\nTổng tiền: " + Math.round(totalPrice) + " VNĐ" +
+                                        "\nPhương thức: " + method
+                        );
+
+                        Optional<ButtonType> result = paymentAlert.showAndWait();
+
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                            boolean booked = parkingService.bookSlot(
+                                    slot.getId(),
+                                    UserSession.getUserId(),
+                                    totalMinutes,
+                                    method
+                            );
+
+                            if (booked) {
+                                parkingService.confirmPayment(slot.getId());
+
+                                slot.setStatus("OCCUPIED");
+                                updateButtonStyle(btn, slot);
+
+                                showAlert(Alert.AlertType.INFORMATION,
+                                        "Thành công",
+                                        "Thanh toán thành công qua " + method);
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        showAlert(Alert.AlertType.ERROR, "Lỗi", "Dữ liệu thời gian không hợp lệ");
+                    }
                 }
                 return null;
             });
-        } else {
-            // CHẾ ĐỘ ĐẾM NGƯỢC
+
+        }
+        // ================= OCCUPIED SLOT =================
+        else {
             Label countdownLabel = new Label("--:--:--");
             countdownLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
-            // LẤY THỜI GIAN KẾT THÚC TỪ DATABASE
             countdownLabel.setMinWidth(150);
-            // Hoặc cho phép nó tự giãn thoải mái
-            countdownLabel.setPrefWidth(Label.USE_COMPUTED_SIZE);
+
             LocalDateTime endTime = parkingService.getBookingEndTime(slot.getId());
             if (endTime != null) {
-                startCountdown(endTime, countdownLabel,slot,btn);
+                startCountdown(endTime, countdownLabel, slot, btn);
             }
-            container.getChildren().addAll(new Label("Mã: " + slot.getSlotCode()), new Label("Thời gian còn lại:"), countdownLabel);
+
+            container.getChildren().addAll(
+                    new Label("Mã: " + slot.getSlotCode()),
+                    new Label("Thời gian còn lại:"),
+                    countdownLabel
+            );
+
             dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         }
+
         dialog.getDialogPane().setContent(container);
         dialog.showAndWait();
     }
-    private void startCountdown(LocalDateTime endTime, Label label,ParkingSlot slot, Button btn) {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            java.time.Duration diff = java.time.Duration.between(LocalDateTime.now(), endTime);
+    private void startCountdown(LocalDateTime endTime,
+                                Label label,
+                                ParkingSlot slot,
+                                Button btn) {
+        Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), e -> {
+            java.time.Duration diff =
+                    java.time.Duration.between(LocalDateTime.now(), endTime);
             if (diff.isNegative() || diff.isZero()) {
                 label.setText("HẾT GIỜ");
-                if (!slot.getStatus().equals("EMPTY")) {
-                    slot.setStatus("EMPTY");
-                    updateButtonStyle(btn, slot);
-                }
+                loadDataAndRender(
+                        UserSession.getUser().getRole().equals("ADMIN")
+                );
+                timeline.stop();
             } else {
                 long h = diff.toHours();
                 long m = diff.toMinutesPart();
                 long s = diff.toSecondsPart();
                 label.setText(String.format("%02d:%02d:%02d", h, m, s));
             }
-        }));
+        });
+        timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
         label.sceneProperty().addListener((obs, old, newVal) -> {
-            if (newVal == null) timeline.stop();
+            if (newVal == null) {
+                timeline.stop();
+            }
         });
     }
-    // --- CÁC HÀM CŨ GIỮ NGUYÊN ---
     private void updateButtonStyle(Button btn, ParkingSlot slot) {
         if (slot.getStatus().equals("EMPTY")) {
             btn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 5;");
@@ -174,7 +259,7 @@ public class ParkingMapController {
     }
     public void startAutoUpdate(boolean isAdmin) {
         Timeline autoUpdate = new Timeline(new KeyFrame(Duration.seconds(30), event -> {
-            parkingService.getSlotsWithLiveStatus();
+            this.slots = parkingService.getSlots(currentLotId);
             loadDataAndRender(isAdmin);
         }));
         autoUpdate.setCycleCount(Animation.INDEFINITE); // Chạy vô hạn cho đến khi đóng App

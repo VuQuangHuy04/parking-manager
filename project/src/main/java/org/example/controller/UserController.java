@@ -55,14 +55,14 @@ public class UserController {
         }
     }
     @FXML public void openHistory(ActionEvent event) { loadInterface("/view/User/UserHistory.fxml"); }
-    @FXML public void openInformation(ActionEvent event) { loadInterface("/view/User/profile.fxml"); }
+    @FXML public void openInformation(ActionEvent event) { loadInterface("/view/User/AccountView.fxml"); }
     // --- CÁC HÀM CỦA ADMIN ---
     @FXML public void openAdminControl(ActionEvent event) {
         AdressController.setAdminView(true);
         loadInterface("/view/User/Parkingdashboad.fxml");
     }
     @FXML public void openUserManagement(ActionEvent event) { loadInterface("/view/RevenueView.fxml"); }
-    @FXML public void openSystemReport(ActionEvent event) { loadInterface("/view/Admin/reports.fxml"); }
+    @FXML public void openHistoryManage(ActionEvent event) { loadInterface("/view/Admin/ManageHistory.fxml"); }
     // --- HÀM LOGOUT ---
     @FXML
     public void handleLogout(ActionEvent event) {

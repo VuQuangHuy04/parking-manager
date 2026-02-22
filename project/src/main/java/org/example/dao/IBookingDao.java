@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IBookingDao {
-    boolean createBooking(int slotId, int userId, LocalDateTime endTime);
-    LocalDateTime getActiveBookingEndTime(int slotId);
-    void clearExpiredBookings();
+    public boolean createBooking(int slotId, int userId, int hours, String paymentMethod);
+    public LocalDateTime getActiveBookingEndTime(int slotId);
+    public void clearExpiredBookings(LocalDateTime now);
 }

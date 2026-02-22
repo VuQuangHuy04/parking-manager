@@ -3,10 +3,7 @@ package org.example.dao;
 import org.example.constant.AuthResult;
 import org.example.model.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 import org.example.session.UserSession;
 import org.example.utils.DBConnection;
@@ -17,7 +14,7 @@ public class UserDaoimpl implements UserDao{
             PreparedStatement ps = conn.prepareStatement("select * from users where username = ?");
             ps.setString(1,username);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new User(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("role"));
+            if(rs.next()) return new User(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("role"),rs.getString("email"));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -59,5 +56,39 @@ public class UserDaoimpl implements UserDao{
             e.printStackTrace();
             return false;
         }
+    }
+    @Override
+    public boolean updateEmailIfEmpty(int userId, String newEmail) {
+        // Câu lệnh SQL: Chỉ update nếu email hiện tại đang NULL hoặc TRỐNG
+        String sql = "UPDATE users SET email = ? WHERE id = ? AND (email IS NULL OR email = '')";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newEmail);
+            ps.setInt(2, userId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu update thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public User getCurrentUser(int id) {
+        try (Connection conn = DBConnection.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("email")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

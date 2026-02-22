@@ -44,7 +44,6 @@ public class ParkingService {
     }
     // --- QUẢN LÝ Ô ĐỖ (SLOTS) ---
     public List<ParkingSlot> getSlotsWithLiveStatus() {
-        bookingDAO.clearExpiredBookings();
         return slotDaoimpl.getAllSlots();
     }
     public boolean insertSlot(ParkingSlot slot) {
@@ -53,14 +52,18 @@ public class ParkingService {
     public boolean deleteSlot(int slotId) {
         return slotDaoimpl.deleteSlot(slotId);
     }
-    // Dành cho User: Lấy map và tự động cập nhật trạng thái trống/đầy theo thời gian thực
-    public List<ParkingSlot> getSlotsWithLiveStatus(int lotId) {
-        bookingDAO.clearExpiredBookings(); // Quét dọn DB trước khi trả dữ liệu về UI
+    public List<ParkingSlot> getSlots(int lotId) {
         return slotDaoimpl.getSlotsByLotId(lotId);
     }
-    public boolean bookSlot(int slotId, int userId, int hours) {
-        LocalDateTime endTime = LocalDateTime.now().plusHours(hours);
-        return bookingDAO.createBooking(slotId, userId, endTime);
+    public boolean bookSlot(int slotId, int userId, int hours, String paymentMethod) {
+        return bookingDAO.createBooking(slotId, userId, hours, paymentMethod);
+    }
+    public double calculatePrice(double minutes) {
+        double pricePerMinute = 5000.0 / 60.0;
+        return Math.ceil(minutes * pricePerMinute);
+    }
+    public boolean confirmPayment(int slotId) {
+        return bookingDAO.confirmPayment(slotId);
     }
     public LocalDateTime getBookingEndTime(int slotId) {
         return bookingDAO.getActiveBookingEndTime(slotId);
@@ -68,4 +71,5 @@ public class ParkingService {
     public void updateSlotPositionp(int lotId, String code, double x, double y) {
         slotDaoimpl.updateSlotPosition(lotId, code, x, y);
     }
+
 }

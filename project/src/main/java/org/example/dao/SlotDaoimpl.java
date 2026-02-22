@@ -7,7 +7,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 public class SlotDaoimpl implements ISlotDao{
     @Override
     public List<ParkingSlot> getAllSlots(){
@@ -29,7 +28,6 @@ public class SlotDaoimpl implements ISlotDao{
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
-
     @Override
     public List<ParkingSlot> getSlotsByLotId(int lotId) {
         List<ParkingSlot> list = new ArrayList<>();
@@ -51,7 +49,6 @@ public class SlotDaoimpl implements ISlotDao{
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
-
     @Override
     public boolean insertSlot(ParkingSlot slot) {
         String sql = "INSERT INTO parking_slots (lot_id, slot_code, x_pos, y_pos, status) VALUES (?, ?, ?, ?, ?)";
@@ -66,7 +63,6 @@ public class SlotDaoimpl implements ISlotDao{
         } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
-
     @Override
     public void updateSlotPosition(int lotId, String code, double x, double y) {
         String sql = "UPDATE parking_slots SET x_pos = ?, y_pos = ? WHERE lot_id = ? AND slot_code = ?";
@@ -93,14 +89,5 @@ public class SlotDaoimpl implements ISlotDao{
     @Override
     public boolean updateStatus(int slotId, String status, int userId) {
         return false;
-    }
-    public void setOccupied(int slotId, int userId) throws SQLException {
-        String sql = "UPDATE parking_slots SET status='OCCUPIED', user_id=? WHERE id=?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, slotId);
-            ps.executeUpdate();
-        }
     }
 }

@@ -3,10 +3,10 @@ CREATE TABLE users (
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     role TEXT NOT NULL CHECK(role IN ('ADMIN','USER')),
+    email TEXT,
     latitude REAL,
     longitude REAL
 );
-
 -- 2. Bảng Parking Lots
 CREATE TABLE parking_lots (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +38,9 @@ CREATE TABLE bookings (
     start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     end_time DATETIME,
     total_price REAL DEFAULT 0,
-    status TEXT DEFAULT 'ACTIVE' CHECK(status IN ('ACTIVE','DONE','CANCELLED')),
+    status TEXT DEFAULT 'ACTIVE' CHECK(status IN ('ACTIVE','DONE','PENDING','CANCELLED')),
+     mail_sent INTEGER DEFAULT 0,
+    payment_method TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (slot_id) REFERENCES parking_slots(id)
 );

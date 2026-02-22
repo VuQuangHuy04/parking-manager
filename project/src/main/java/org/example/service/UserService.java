@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.api.osmAPI;
 import org.example.dao.UserDao;
 import org.example.dao.UserDaoimpl;
+import org.example.model.User;
 import org.example.session.UserSession;
 
 public class UserService {
@@ -19,5 +20,11 @@ public class UserService {
             UserSession.setUserLon(coordinate[1]);
         }
         return updated;
+    }
+    public boolean updateEmail(int userId, String email) {
+        return userDao.updateEmailIfEmpty(userId, email);
+    }
+    public User getCurrentUser(int userId){
+        return userDao.getCurrentUser(userId);
     }
 }

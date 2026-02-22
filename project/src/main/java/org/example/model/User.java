@@ -7,13 +7,15 @@ public class User {
     private String role;
     private double lat;
     private double lon;
+    private String mail;
     public User(){
     }
-    public User( int user_id, String username, String password, String role) {
+    public User( int user_id, String username, String password, String role, String mail) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.mail = mail;
     }
     public String getUsername() {
         return username;
@@ -27,21 +29,18 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getRole() {
         return role;
     }
     public void setRole(String role) {
         this.role = role;
     }
-
     public int getUser_id() {
         return user_id;
     }
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
-
     public double getLat() {
         return lat;
     }
@@ -53,5 +52,11 @@ public class User {
     }
     public void setLon(double lon) {
         this.lon = lon;
+    }
+    public String getMail() {
+        return mail;
+    }
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }

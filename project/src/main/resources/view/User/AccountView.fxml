@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15"
+      alignment="CENTER"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controller.AccountController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="THÔNG TIN TÀI KHOẢN"
+           style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+
+        <!-- Username -->
+        <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="usernameLabel"
+               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Role -->
+        <Label text="Role:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="roleLabel"
+               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Email -->
+        <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField"
+                   promptText="Nhập email của bạn"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <Button fx:id="saveBtn"
+            text="Lưu email"
+            prefWidth="150"
+            onAction="#onSaveEmail"/>
+
+    <Label fx:id="statusLabel"
+           textFill="green"/>
+
+</VBox>
