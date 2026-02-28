@@ -99,7 +99,6 @@ public class ParkingMapController {
                         int hours = hourSpinner.getValue();
                         int minutes = minuteSpinner.getValue();
                         int totalMinutes = hours * 60 + minutes;
-
                         if (totalMinutes <= 0) {
                             showAlert(Alert.AlertType.ERROR, "Lỗi", "Thời gian phải lớn hơn 0");
                             return null;
@@ -136,10 +135,8 @@ public class ParkingMapController {
 
                             if (booked) {
                                 parkingService.confirmPayment(slot.getId());
-
                                 slot.setStatus("OCCUPIED");
                                 updateButtonStyle(btn, slot);
-
                                 showAlert(Alert.AlertType.INFORMATION,
                                         "Thành công",
                                         "Thanh toán thành công qua " + method);
@@ -170,10 +167,8 @@ public class ParkingMapController {
                     new Label("Thời gian còn lại:"),
                     countdownLabel
             );
-
             dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         }
-
         dialog.getDialogPane().setContent(container);
         dialog.showAndWait();
     }
